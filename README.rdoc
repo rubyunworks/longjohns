@@ -1,0 +1,6 @@
+= Longfish
+
+Longfish is an RDoc template patterned after John Long's design
+of Ruby's offical website.
+
+

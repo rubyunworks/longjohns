@@ -1,0 +1,11 @@
+.cache
+log
+pkg
+demo/fish-sampler/doc
+doc/rdoc
+doc/ri
+doc/webri
+doc/webri.html
+site/samples
+work/sandbox
+work/trash

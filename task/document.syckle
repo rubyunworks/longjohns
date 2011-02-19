@@ -1,0 +1,28 @@
+---
+ri:
+  service : RiDoc
+  output  : ri
+  include : [lib]
+
+rdoc:
+  service : RDoc
+  template: longfish
+  output  : site/doc/api
+  title   : LongFish API
+  main    : README.rdoc
+  extra   : ""
+  include : [README.rdoc, lib]
+  exclude : [lib/longfish/static, lib/longfish/template]
+  active  : true
+
+yard:
+  service : Yard
+  #template: ~
+  output  : site/doc/yard
+  title   : LongFish API
+  readme  : README.core
+  #extra   : ""
+  include : [README.rdoc, lib]
+  exclude : [lib/longfish/static, lib/longfish/template]
+  active  : false
+

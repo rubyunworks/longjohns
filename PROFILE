@@ -1,0 +1,16 @@
+---
+title  : LongFish
+author : Thomas Sawyer
+
+description:
+  LongFish is RDoc template modeled after John Long's design
+  the ruby-lang.org. It allows your Ruby application or library
+  have a very Ruby look and feel.
+
+requires:
+  - rdazzle
+  - syckle (build)
+
+copyright: 
+  Copyright 2009 Thomas Sawyer
+

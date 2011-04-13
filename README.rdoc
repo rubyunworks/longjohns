@@ -1,6 +1,37 @@
 = Longfish
+A RubyWorks Project
 
-Longfish is an RDoc template patterned after John Long's design
+== DESCRIPTION
+
+Longfish is an documentation template patterned after John Long's design
 of Ruby's offical website.
 
+It's provides a traditional RDoc generator as well as a modern Shomen
+generator via the +longfish+ exectuable.
+
+
+== RESOURCES
+
+* home: http://rubyworks.github.com/longfish
+* code: http://github.com/rubyworks/longfish
+
+
+== REQUIREMENTS
+
+* RDazzle
+* Malt
+
+
+== INSTALL
+
+    $ gem install longfish
+
+
+== LEGAL
+
+(Apcahe 2.0 License)
+
+Copyright (c) 2010 Thomas Sawyer
+
+Layout and style by John Long, the creator of RadiantCMS.
 

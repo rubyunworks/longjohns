@@ -16,15 +16,33 @@ generator via the +longfish+ exectuable.
 * code: http://github.com/rubyworks/longfish
 
 
-== REQUIREMENTS
+== USAGE
 
-* RDazzle
-* Malt
+=== RDoc
+
+Use the RDoc generator just like any other 3rd party RDoc generator:
+
+    $ rdoc -T longfish ...
+
+=== Shomen
+
+To generate documentation via a shomen document use:
+
+    $ longfish --output [directory] [shomen-document]
+
+To generate the +shomen-document+ (e.g. +shomen.yaml+ or +shomen.json+)
+see the Shomen[http://rubyworks.github.com/shomen] project.
 
 
 == INSTALL
 
     $ gem install longfish
+
+
+== REQUIREMENTS
+
+* RDazzle
+* Malt
 
 
 == LEGAL

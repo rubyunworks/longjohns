@@ -1,0 +1,306 @@
+<%
+    desc = markup(comment)
+    if md = /^\s*\<h1\>(.*?)\<\/h1\>/.match(desc)
+      #name = md[1]
+      desc = md.post_match
+    else
+      #name = context.name
+    end
+%>
+
+<div id="content-wrapper">
+
+    <div id="head-wrapper-1">
+      <div id="head-wrapper-2">
+        <div id="head">
+          <h1>
+            <b style="font-size: 10pt">(<%= type %>) <%= namespace %></b><br/>
+            <%= name %>
+          </h1>
+        </div>
+      </div>
+    </div>
+
+    <div id="content">
+
+        <!-- DESCRIPTION -->
+
+        <% if desc && !desc.empty? %>
+        <div class="description">
+          <%= desc %>
+        </div>
+        <% end %>
+
+        <!-- REQUIRES -->
+
+        <% if requires && !requires.empty? %>
+        <h3>Required Files</h3>
+        <ul>
+          <% requires.each do |req| %>
+            <li><%= h req %></li>
+          <% end %>
+        </ul>
+        <% end %>
+
+        <!-- SECTIONS -->
+
+        <% if sections && !sections.empty? %>
+        <h3>Contents</h3>
+        <ul>
+          <% sections.each do |section| %>
+            <li><a href="#<%= url(section) %>"><%= h section['title'] %></a></li>
+          <% end %>
+        </ul>
+        <% end %>
+
+        <!-- INCLUDED MODULES -->
+
+        <% if includes && !includes.empty? %>
+        <h3>Included Modules</h3>
+        <ul>
+          <% includes.each do |inc| %>
+            <li>
+              <% if table[inc] %>
+                <a href="<%= url(inc) %>"><%= h inc %></a>
+              <% else %>
+                <span><%= h inc %></span>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+        <% end %>
+
+        <!-- DESCRIPTION (of what?) --->
+
+        <% if sections && !sections.empty? %>
+          <% sections.each do |section| %>
+            <h3><a name="<%= url(section) %>"><%= h section['title'] %></a></h3>
+            <% if !(description = section.description).empty? %>
+              <div class="description">
+                <%= description %>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+
+        <!-- CLASSES AND MODULES -->
+
+        <% classes_and_modules = classes + modules %>
+        <% if !classes_and_modules.empty? %>
+        <h3>Classes and Modules</h3>
+        <ul>
+          <% classes_and_modules.sort.each do |name| %>
+            <% mod = table[name] %>
+            <li><span class="type"><%= mod["!"] %></span> <a href="<%= url(name) %>"><%= mod['name'] %></a></li>
+          <% end %>
+        </ul>
+        <% end %>
+
+        <!-- CONSTANTS -->
+
+        <% if constants && !constants.empty? %>
+        <h3>Constants</h3>
+        <table border='0' cellpadding='5'>
+          <% constants.each do |cname| %>
+            <% const = table[cname] %>
+            <tr valign='top'>
+              <td class="attr-name"><%= h const['name'] %></td>
+              <td>=</td>
+              <td class="attr-value"><%= h const['value'] %></td>
+            </tr>
+            <% desc = const['description'] %>
+            <% if desc && !desc.empty? %>
+            <tr valign='top'>
+              <td>&nbsp;</td>
+              <td colspan="2" class="attr-desc"><%= desc %></td>
+            </tr>
+            <% end %>
+          <% end %>
+        </table>
+        <% end %>
+
+        <!-- ATTRIBUTES -->
+
+        <% if attributes && !attributes.empty? %>
+        <h3>Attributes</h3>
+        <table border='0' cellpadding='5'>
+          <% attributes.each do |attrib| %>
+            <tr valign='top'>
+                <td class='attr-rw'>
+                    [<%= attrib['rw'] %>]
+                </td>
+                <td class='attr-name'><%= h attrib['name'] %></td>
+                <td class='attr-desc'><%= attrib['description'].strip %></td>
+            </tr>
+          <% end %>
+        </table>
+        <% end %>
+
+        <!-- CLASS METHODS -->
+
+        <%
+           functions_by_access = Hash.new{|h,k| h[k]=[]}
+           functions.each do |name|
+             entry = table[name]
+             next unless entry  # warning?
+             #next unless visibility == :public || visibility == :protected || methods.any? {|m| m.force_documentation }
+             functions_by_access[entry['access']] << name
+           end
+        %>
+
+        <% functions_by_access.each do |access, access_functions| %>
+          <h3><%= access.to_s.capitalize %> Class Methods</h3>
+          <dl>
+            <% access_functions.each do |name| %>
+              <%= include_template("method_context.rhtml", name, table[name]) %>
+            <% end %>
+          </dl>
+        <% end %>
+
+        <!-- INSTANCE METHODS -->
+
+        <%
+           methods_by_access = Hash.new{|h,k| h[k]=[]}
+           methods.each do |name|
+             entry = table[name]
+             next unless entry  # warning?
+             #next unless visibility == :public || visibility == :protected || methods.any? {|m| m.force_documentation }
+             methods_by_access[entry['access']] << name
+           end
+        %>
+
+        <% methods_by_access.each do |access, access_methods| %>
+          <h3><%= access.to_s.capitalize %> Instance Methods</h3>
+          <dl>
+            <% access_methods.each do |name| %>
+              <%= include_template("method_context.rhtml", name, table[name]) %>
+            <% end %>
+          </dl>
+        <% end %>
+
+    </div>
+
+</div>
+
+<hr class="hidden-modern" />
+
+<div id="sidebar-wrapper">
+
+    <div id="sidebar">
+
+        <div class="navigation" style="background-color: transparent;">
+          <form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+          <fieldset>
+            <legend>Quicksearch</legend>
+            <input type="text" name="quicksearch" value="" class="quicksearch-field" style="width: 95%;" />
+          </fieldset>
+          </form>
+        </div>
+
+        <br/><br/>
+
+        <!-- LAST MODIFIED -->
+
+        <div class="navigation">
+        <h3>Last Modified</h3>
+        <ul>
+          <li class="modified-date"><%= modified %></li>
+        </ul>
+        </div>
+
+        <!-- REQUIRES -->
+
+        <% if requires && !requires.empty? %>
+        <div class="navigation">
+        <h3>Requires</h3>
+        <ul>
+          <% requires.each do |req| %>
+            <li><%= req %></li>
+          <% end %>
+        </ul>
+        </div>
+        <% end %>
+
+        <!-- TODO: GITHUB -->
+
+        <% if github? %>
+        <div class="navigation">
+          <h3 class="scs-url">Github</h3>
+          <ul>
+            <li><a target="_top" href="<%= github_url %>"><%= github_url %></a></li>
+          </ul>
+        </div>
+        <% end %>
+
+<!--
+        <!-- TODO: REQUIRED BY -->
+
+        <% if files && !files.empty? %>
+        <div class="navigation">
+          <h3>Required By</h3>
+          <ul>
+            <% files.each do |file| %>
+              <li><a href="<%= url(file) %>"><%= file %></a></li>
+            <% end %>
+          </ul>
+        </div>
+        <% end %>
+-->
+
+        <!-- INCLUDED MODULES -->
+
+        <% if includes && !includes.empty? %>
+        <div class="navigation">
+          <h3>Included Modules</h3>
+          <ul>
+              <% includes.each do |inc| %>
+              <li>
+                  <% if mod = table[inc] %>
+                    <a href="<%= url(inc) %>"><%= mod['name'] %></a>
+                  <% else %>
+                    <span><%= inc %></span>
+                  <% end %>
+              </li>
+              <% end %>
+          </ul>
+        </div>
+        <% end %>
+
+        <!-- CLASSES AND MODULES -->
+
+        <% classes_and_modules = classes + modules %>
+        <% if !classes_and_modules.empty? %>
+          <div class="navigation">
+            <h3>Classes and Modules</h3>
+            <ul>
+              <% (modules.sort + classes.sort).each do |mod| %>
+                <li><a href="<%= url(mod) %>"><%= mod.sub(key + '::', '') %></a></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <!-- METHOD LIST -->
+
+        <%
+            list = functions + methods
+            #unless options.show_all
+            #    list = list.find_all {|m| m.visibility == :public || m.visibility == :protected || m.force_documentation }
+            #end
+        %>
+        <% if !list.empty? %>
+          <div class="navigation">
+            <h3>Methods</h3>
+            <ul class="menu quicksearch-target">
+              <% list.sort{ |a, b| a <=> b }.each do |method| %>
+                <li><a href="#<%= url(method) %>"><%= method.sub(key, '') %></a></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+
+    </div>
+
+</div>
+

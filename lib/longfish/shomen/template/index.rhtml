@@ -15,10 +15,10 @@
 
   <link rel="alternate stylesheet" type="text/css" href="assets/long/css/low_vision_screen.css" media="screen" title="Low vision" />
 
-  <script type="text/javascript" src="assets/jquery.js"></script>
+  <script type="text/javascript" src="<%= rel_prefix %>/assets/jquery.js"></script>
   <script type="text/javascript" src="<%= rel_prefix %>/assets/prettify.js"></script>
-  <script type="text/javascript" src="assets/quicksearch.js"></script>
-  <script type="text/javascript" src="assets/main.js"></script>
+  <script type="text/javascript" src="<%= rel_prefix %>/assets/quicksearch.js"></script>
+  <script type="text/javascript" src="<%= rel_prefix %>/assets/main.js"></script>
 
   <script type="text/javascript">
     $(document).ready( function() {
@@ -34,24 +34,18 @@
 
     <div id="header">
       <div id="logo" style="font-size: 52px; font-family: times, serif; font-style: italic; color: black;">
-        <img src="assets/long/img/logo.gif" alt="<%= title %>" title="" height="119" align="absmiddle"><%= title %>
+        <img src="assets/long/img/logo.gif" alt="<%= title %>" title="" height="119" align="absmiddle"><%= metadata['title'] %>
       </div>
 
       <div class="site-links">
-<span><strong>Index</strong></span><span class="separator"> | </span>
-<% if site_homepage %>
-  <a href="<%= site_homepage %>">Home Page</a><span class="separator"> |</span>
-<% end %>
-<% if site_community %>
-  <a href="<%= site_community %>">Community</a><span class="separator"> | </span>
-<% end %>
-<% if site_news %>
-  <a href="<%= site_news %>">News</a><span class="separator"> | </span>
-<% end %>
-<% if site_repository %>
-  <a href="<%= site_repository %>">Repository</a><span class="separator"> | </span>
-<% end %>
-<a href="http://www.ruby-lang.org/en/about/">About Ruby</a>
+        <span><strong>Index</strong></span><span class="separator"> | </span>
+        <% if metadata %>
+        <% resources = metadata['resources'] || {} %>
+        <% resources.each do |page, url| %>
+          <a href="<%= url %>"><%= page.capitalize %></a><span class="separator"> |</span>
+        <% end %>
+        <% end %>
+        <a href="http://www.ruby-lang.org/en/about/">About Ruby</a>
       </div>
     </div>
 
@@ -63,15 +57,16 @@
 <div id="content-wrapper">
 
     <div id="head-wrapper-1">
-        <div id="head-wrapper-2">
-            <div id="head">
-                <h1><%= index_title %></h1>
-            </div>
+      <div id="head-wrapper-2">
+        <div id="head">
+          <br/>
+          <%= metadata['readme_title'] %>
         </div>
+      </div>
     </div>
 
     <div id="content" style="clear: both;">
-      <%= index_description %>
+      <%= readme %>
     </div>
 
 </div> <!-- content-wrapper -->
@@ -94,39 +89,45 @@
       <hr class="hidden-modern" /><br/><br/>
 
       <!-- TOPLEVEL FILES -->
-      <% simple_files = files.select { |f| f.parser == RDoc::Parser::Simple } %>
-      <% unless simple_files.empty? then %>
+
+      <% info_files = {} %>
+      <% table.each{ |k,v| info_files[k] = v if v['!'] == 'file' } %>
+      <% if !info_files.empty? %>
       <div class="navigation">
         <h3 class="section-header">Information</h3>
         <ul class="quicksearch-target">
-        <% simple_files.each do |f| %>
-          <li class="file"><a href="<%= f.path %>"><%= h f.base_name %></a></li>
+        <% info_files.each do |k,v| %>
+          <li class="file"><a href="<%= url(k) %>"><%= h v %></a></li>
         <% end %>
         </ul>
       </div>
       <% end %>
 
       <!-- CLASS INDEX -->
+
       <div class="navigation">
         <h3 class="section-header">Class Index</h3>
         <ul class="quicksearch-target">
-        <% classes.each do |index_klass| %>
-          <li class="<%= index_klass.type %>"><a href="<%= index_klass.path %>"><%= index_klass.full_name %></a></li>
+        <% table.each do |k, v| %>
+          <% next unless v['!'] == 'class' || v['!'] == 'module' %>
+          <li class="<%= v['!'] %>"><a href="<%= url(k) %>"><%= k %></a></li>
         <% end %>
         </ul>
         <div id="no-class-search-results" style="display: none;">No matching classes.</div>
       </div>
 
       <!-- METHOD INDEX -->
+
       <div class="navigation">
         <h3 class="section-header">Method Index</h3>
         <ul class="quicksearch-target">
-          <% methods_all.each do |method| %>
+          <% table.each do |k, v| %>
+            <% next unless v['!'] == "method" || v['!'] == "function" %>
             <li class="method" style="clear: both; overflow:hidden; white-space:nowrap;">
-              <a href="<%= method.path %>" title="<%= method.parent.full_name %>">
-                <%= method.pretty_name %>
+              <a href="<%= url(k) %>" title="<%= v['parent'] %>">
+                <%= v['name'] %>
               </a>
-              &nbsp;<span style="font-size: 80%; color: #777;"><%= method.parent.full_name %></span>
+              &nbsp;<span style="font-size: 80%; color: #777;"><%= v['parent'] %></span>
             </li>
           <% end %>
         </ul>
@@ -139,29 +140,24 @@
 
 </div> <!-- sidebar-wrapper -->
 
-        <hr class="hidden-modern">
+<hr class="hidden-modern">
 
-        <div class="foot">
-          <div class="site-links">
-<span><strong>Index</strong></span><span class="separator"> | </span>
-<% if site_homepage %>
-  <a href="<%= site_homepage %>">Home Page</a><span class="separator"> |</span>
-<% end %>
-<% if site_community %>
-  <a href="<%= site_community %>">Community</a><span class="separator"> | </span>
-<% end %>
-<% if site_news %>
-  <a href="<%= site_news %>">News</a><span class="separator"> | </span>
-<% end %>
-<% if site_repository %>
-  <a href="<%= site_repository %>">Repository</a><span class="separator"> | </span>
-<% end %>
-<a href="http://www.ruby-lang.org/en/about/">About Ruby</a>
-          </div>
-        </div>
-
+    <div class="foot">
+      <div class="site-links">
+        <span><strong>Index</strong></span><span class="separator"> | </span>
+        <% if metadata %>
+        <% resources = metadata['resources'] || {} %>
+        <% resources.each do |page, url| %>
+          <a href="<%= url %>"><%= page.capitalize %></a><span class="separator"> |</span>
+        <% end %>
+        <% end %>
+        <a href="http://www.ruby-lang.org/en/about/">About Ruby</a>
       </div>
-    </div> <!-- end main-wrapper -->
+    </div>
+
+  </div>
+
+</div> <!-- end main-wrapper -->
 
     <div id="search-box">
 <form id="search-form" action="http://www.google.com/cse">

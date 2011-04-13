@@ -1,0 +1,1 @@
+require 'longfish/shomen/generator'

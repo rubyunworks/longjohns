@@ -106,16 +106,22 @@ fieldset {
 }
 #head {
   float: left;
-  padding-top: 24px;
+  padding-top: 4px;
   padding-bottom: 24px;
   width: 100%;
+  min-height: 80px;
 }
 #head h1 {
   font-size: 240%;
   padding-left: 32px;
   margin: 0;
-  margin-top: 18px;
+  margin-top: 8px;
   margin-right: 269px;
+}
+#head p {
+  padding: 0px;
+  padding-left: 32px;
+  margin: 0;
 }
 #head a { color: white; }
 #intro, #code {
@@ -210,6 +216,10 @@ fieldset {
 }
 #content h3 a:hover, #content h3 a:visited:hover {
   color: #e85353;
+}
+#content li p {
+  margin: 0;
+  padding: 0;
 }
 #content #news ul {
   float: left;

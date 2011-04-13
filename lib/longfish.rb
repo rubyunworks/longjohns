@@ -1,16 +1,11 @@
-puts "RDoc found Longfish template" #if $DEBUG
-
-begin
-  require "rubygems"
-  gem "rdoc", ">= 2.4.2"
-  require "rdoc/rdoc"
-rescue Exception
-  warn "Longfish requires RDoc v2.4.2 or greater."
+# = Longfish Documentation Template
+#
+# The Longfish template is based on John Long's design
+# of the ruby-lang.org website. It was built to supply
+# Ruby core and standard documentation with an "offical"
+# look, but there's no reason you can't use it for your
+# project too, if you prefer it.
+#
+module Longfish
+  VERSION = "0.1.0"
 end
-
-require 'longfish/generator'
-
-RDoc.generator_option('longfish') do
-  Longfish
-end
-

@@ -1,0 +1,54 @@
+<p class="source-link" style="float: right;">
+    <a href="javascript:toggleSource('<%= url(key) %>_source')" id="l_<%= url(key) %>_source"><img src="<%= rel_prefix %>/assets/long/img/rb.png" alt="[+]"></a>
+    <%
+        if source =~ /File\s(\S+), line (\d+)/
+            path = $1
+            line = $2.to_i
+        end
+        github = github_url(path)
+        if github
+    %>
+    | <a href="<%= "#{github}#L#{line}" %>" target="_blank" class="github_url">on GitHub</a>
+    <% end %>
+</p>
+
+<dt>
+<a name="<%= url(key) %>"></a><b><%= name %></b><br/>
+<% if interface && !interface.empty? %>
+  <% interface.each do |face| %>
+    <%= face %><br/>
+  <% end %>
+
+  <!-- cseq = method.call_seq.gsub(/[-=]>/, '&rarr;').gsub("\n", '<br/>') -->
+<% else %>
+  <a name="<%= url(key) %>"></a><b><%= name %></b><%= h arguments.map{ |a| a['name'] }.join(',') %>
+<% end %>
+</dt>
+
+<!-- TODO: source code -->
+
+<dd>
+
+<% if source %>
+  <div id="<%= url(key) %>_source" style="display: none;">
+    <pre class="code"><code><%= source %></code></pre>
+  </div>
+<% end %>
+
+<% if !comment.empty? %>
+  Not Documented
+<% else %>
+  <%= highlight(comment) %>
+<% end %>
+
+<% if !aliases.empty? %>
+<div class="aka">
+    This method is also aliased as
+    <% aliases.each do |aka| %>
+      <a href="<%= url(aka) %>"><%= h aka %></a>
+    <% end %>
+</div>
+<% end %>
+
+</dd>
+

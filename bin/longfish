@@ -1,0 +1,24 @@
+#!/usr/bin/ruby
+
+require 'clap'
+require 'longfish/shomen'
+
+usage = "usage: ruby #{__FILE__} [--output DIRECTORY] SHOMEN-FILE"
+
+output = nil
+readme = Dir.glob('README.*', File::FNM_CASEFOLD).first
+
+args = Clap.run ARGV,
+  "-h"       => lambda { puts usage; exit },
+  "--help"   => lambda { puts usage; exit },
+  "-o"       => lambda { |arg| output = arg },
+  "--output" => lambda { |arg| output = arg },
+  "-m"       => lambda { |arg| readme = arg },
+  "--main"   => lambda { |arg| readme = arg }
+
+file = args[0]
+
+generator = Longfish::Shomen::Generator.new(File.new(file), :output=>output, :readme=>readme)
+
+generator.generate
+

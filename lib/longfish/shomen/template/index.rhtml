@@ -97,7 +97,7 @@
         <h3 class="section-header">Information</h3>
         <ul class="quicksearch-target">
         <% info_files.each do |k,v| %>
-          <li class="file"><a href="<%= url(k) %>"><%= h v %></a></li>
+          <li class="file"><a href="<%= url(k) %>"><%= v['name'] %></a></li>
         <% end %>
         </ul>
       </div>

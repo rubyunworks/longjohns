@@ -22,13 +22,15 @@ generator via the +longfish+ exectuable.
 
 Use the RDoc generator just like any other 3rd party RDoc generator:
 
-    $ rdoc -T longfish ...
+    $ rdoc -f longfish [...]
 
 === Shomen
 
 To generate documentation via a shomen document use:
 
     $ longfish --output [directory] [shomen-document]
+
+Default output directory is +doc+.
 
 To generate the +shomen-document+ (e.g. +shomen.yaml+ or +shomen.json+)
 see the Shomen[http://rubyworks.github.com/shomen] project.

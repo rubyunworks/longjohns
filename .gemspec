@@ -144,6 +144,8 @@ files:
 - lib/longfish/shomen/template/file_context.rhtml
 - lib/longfish/shomen/template/index.rhtml
 - lib/longfish/shomen/template/method_context.rhtml
+- lib/longfish/shomen/template/script.rhtml
+- lib/longfish/shomen/template/script_context.rhtml
 - lib/longfish/shomen.rb
 - lib/longfish/version.rb
 - lib/longfish.rb

@@ -261,6 +261,7 @@ fieldset {
   overflow: auto;
   letter-spacing: 0;
   font-family: monospace;
+  padding-left: 10px;
 }
 #content pre.code {
   background-color: #213449;

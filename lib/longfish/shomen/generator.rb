@@ -49,13 +49,17 @@ module Shomen
       @table.each do |name, entry|
         type = entry['!']
         case type
+        when 'file'
+          context = RenderingContext.new(self, name, entry)
+          result  = template('file').result(context._binding)
+          save(name, result)
         when 'class', 'module'
           context = RenderingContext.new(self, name, entry)
           result  = template('class').result(context._binding)
           save(name, result)
-        when 'file', 'script'
+        when 'script'
           context = RenderingContext.new(self, name, entry)
-          result  = template('file').result(context._binding)
+          result  = template('script').result(context._binding)
           save(name, result)
         end
       end
@@ -108,14 +112,16 @@ module Shomen
       end
     end
 
-    #
+    # Parse README file, if present.
     def parse_readme
       @table['(metadata)'] ||= {}
       @table['(metadata)']['readme'] = @table['(metadata)']['description']
 
-      if @readme && File.exist?(@readme)
+      #if @readme && File.exist?(@readme)
+      readme = table[@readme]
+      if readme  && readme['!'] == 'file'
         require 'malt'
-        text = Malt.render(:file=>@readme)
+        text = Malt.render(:text=>readme['text'], :file=>readme['name'])
         if md = /^\s*(.*?)\<h2\>/m.match(text)
           @table['(metadata)']['readme_title']  = md[1]  # TODO: use diffenrt field ?
           @table['(metadata)']['readme'] = "<h2>" + md.post_match

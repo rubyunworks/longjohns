@@ -3,7 +3,7 @@ require 'rdazzle/components/prettify'
 #require 'rdazzle/components/subversion'
 require 'rdazzle/components/github'
 
-module Longfish
+module LongJohns
 
   # RDoc generator provided the context to generate
   # rdoc-based templates.
@@ -15,7 +15,7 @@ module Longfish
 
     #
     def self.template_name
-      'longfish'
+      'longjohns'
     end
 
     #

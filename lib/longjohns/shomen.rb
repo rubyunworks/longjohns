@@ -1,0 +1,1 @@
+require 'longjohns/shomen/generator'

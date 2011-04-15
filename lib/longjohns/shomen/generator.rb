@@ -1,4 +1,4 @@
-require 'longfish/version'
+require 'longjohns/version'
 
 require 'yaml'
 require 'erb'
@@ -7,7 +7,7 @@ require 'fileutils'
 #$NOWRITE = true
 
 #
-module Longfish
+module LongJohns
 module Shomen
 
   #

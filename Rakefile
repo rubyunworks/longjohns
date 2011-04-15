@@ -1,4 +1,4 @@
-name    = "longfish"
+name    = "longjohns"
 version = File.read('VERSION').strip
 
 desc "generate and install gem"

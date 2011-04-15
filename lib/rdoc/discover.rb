@@ -1,5 +1,4 @@
 require 'rdazzle'
-require 'longfish/rdoc/generator'
+require 'longjohns/rdoc/generator'
 
-RDazzle.register(Longfish::RDocGenerator, :name=>'longfish')
-
+RDazzle.register(LongJohns::RDocGenerator, :name=>'longjohns')
